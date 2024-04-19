@@ -3,22 +3,15 @@
 </template>
 
 <script>
-export default {
-  name: 'App',
-  mounted() {
-    this.initMap();
-  },
-  methods: {
-    initMap() {
-      const mapOptions = {
-        center: { lat: -34.397, lng: 150.644 },
-        zoom: 0
-      };
-      const mapElement = document.getElementById('map');
-      new google.maps.Map(mapElement, mapOptions);
-    }
-  }
-}
+import * as maptilersdk from '@maptiler/sdk';
+
+maptilersdk.config.apiKey = 'I4M3OisYlYJWkLCFDwoa';
+const map = new maptilersdk.Map({
+  container: 'map', // container's id or the HTML element to render the map
+  style: maptilersdk.MapStyle.STREETS,
+  center: [16.62662018, 49.2125578], // starting position [lng, lat]
+  zoom: 14, // starting zoom
+});
 </script>
 
 <style>

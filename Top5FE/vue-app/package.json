@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@maptiler/sdk": "^2.0.1",
     "vue": "^3.4.21"
   },
   "devDependencies": {
