@@ -1,7 +1,7 @@
 {
-  "name": "vue-app",
-  "version": "0.0.0",
+  "name": "my-vuejs-map",
   "private": true,
+  "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -14,6 +14,6 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",
-    "vite": "^5.2.8"
+    "vite": "^5.2.0"
   }
 }
