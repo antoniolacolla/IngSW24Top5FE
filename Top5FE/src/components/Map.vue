@@ -27,7 +27,6 @@ onMounted(() => {
   new Marker({color: "#FF0000"})
       .setLngLat([15.898,38.426])
       .addTo(map.value);
-
 }),
     onUnmounted(() => {
       map.value?.remove();
