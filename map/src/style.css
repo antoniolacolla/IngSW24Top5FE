@@ -12,3 +12,44 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   monospace;
 }
+
+
+/* Stile dei popup */
+.popup-content {
+  padding: 10px;
+  background-color: #ffffff;
+  border: 2px solid #000000; /* Bordo nero */
+  border-radius: 10px; /* Arrotondamento dei bordi */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: 'Arial', sans-serif;
+  margin: 2px; /* Margine quasi nullo */
+}
+
+.popup-title {
+  margin: 0;
+  font-size: 16px;
+  color: #333333;
+}
+
+.popup-link {
+  display: block;
+  margin-top: 5px;
+  color: #007bff; /* Colore del link blu */
+  text-decoration: none;
+}
+
+.popup-link:hover {
+  text-decoration: underline;
+}
+
+/* Stile del marker utente */
+.marker-user {
+  color: #0000ff;
+}
+
+/* Stile del marker evento */
+.marker-event {
+  color: #ff0000;
+}
+
+
