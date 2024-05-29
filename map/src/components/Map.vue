@@ -9,7 +9,6 @@ import { Map, MapStyle, Marker, Popup, config } from '@maptiler/sdk';
 import { shallowRef, onMounted, onUnmounted, markRaw } from 'vue';
 import axios from 'axios';
 import '@maptiler/sdk/dist/maptiler-sdk.css';
-import { popup } from 'leaflet';
 
 const mapContainer = shallowRef(null);
 const map = shallowRef(null);
@@ -36,11 +35,13 @@ onMounted(async () => {
 
   // Aggiungi i marker con le coordinate ricevute
   coordinates.forEach(coord => {
+
     const popupContent = `
       <div class="popup-content">
         <h3 class="popup-title">${coord.nomevento}</h3>
         <a class="popup-link" href="https://www.google.com/maps/dir/${coordinateutente.latitudine},${coordinateutente.longitudine}/${coord.latitudine},${coord.longitudine}" target="_blank">Come arrivarci</a>
       </div>`;
+
     const popup = new Popup({ className: 'custom-popup' }).setHTML(popupContent);
     
     const marker = new Marker({ color: "#FF0000" })
@@ -66,13 +67,15 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.map-wrap {
+.map-wrap 
+{
   position: relative;
   width: 100%;
   height: 100vh;
 }
 
-.map {
+.map 
+{
   position: absolute;
   width: 100%;
   height: 100%;
