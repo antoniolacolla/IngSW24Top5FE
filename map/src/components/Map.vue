@@ -25,7 +25,7 @@ onMounted(async () => {
   const responseutente = await axios.get("/api/callRESTutente");
   const coordinateutente = responseutente.data;
 
-  const initialState = { lng: 139.753, lat: 35.6844, zoom: 0 };
+  const initialState = { lng: 11.2892, lat: 44.7269, zoom: 4 };
 
   map.value = markRaw(new Map({
     container: mapContainer.value,
@@ -42,6 +42,7 @@ onMounted(async () => {
         <a class="popup-link" href="https://www.google.com/maps/dir/${coordinateutente.latitudine},${coordinateutente.longitudine}/${coord.latitudine},${coord.longitudine}" target="_blank">Come arrivarci</a>
       </div>`;
     const popup = new Popup({ className: 'custom-popup' }).setHTML(popupContent);
+    
     const marker = new Marker({ color: "#FF0000" })
       .setLngLat([coord.longitudine, coord.latitudine])
       .setPopup(popup) // Aggiungi il popup al marker
@@ -68,7 +69,7 @@ onUnmounted(() => {
 .map-wrap {
   position: relative;
   width: 100%;
-  height: calc(100vh - 77px); /* calculate height of the screen minus the heading */
+  height: 100vh;
 }
 
 .map {
