@@ -2,7 +2,7 @@
   <div>
     <!-- Navbar -->
     <nav class="navbar">
-      <div class="navbar-brand">CONSULTA LA MAPPA DEGLI EVENTI</div>
+      <div class="navbar-brand">QUI PUOI CONSULTARE GLI EVENTI DISPONIBILI SULLA MAPPA</div>
       <button class="calendar-button" @click="openCalendarPopup">Apri Calendario</button>
     </nav>
 
@@ -47,12 +47,13 @@ export default {
 </script>
 
 <style scoped>
+
 /* Navbar Styles */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #5d0460;
+  background-color: #490696;
   padding: 10px 20px;
   color: white;
   position: fixed;
@@ -65,19 +66,18 @@ export default {
 .navbar-brand {
   font-size: 1.5em;
   font-weight: bold;
-  font-family: 'Century Gothic', serif; /* Cambia il tipo di font */
   flex-grow: 1; /* Per centrare il testo */
-  transform: translateX(+45%);
+  font-family: 'Century Gothic', serif;
+  
 }
 
 .calendar-button {
   padding: 10px 20px;
-  background-color: #480c57;
-  color: rgb(255, 255, 255);
+  background-color: #300570;
+  color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-family: 'Century Gothic', serif;
   margin-right: 2%; /* Aggiunto margine alla destra */
 }
 
@@ -134,6 +134,5 @@ export default {
   margin-top: 0; /* Negative margin to overlap with the navbar */
 }
 </style>
-
 
 //antonino
