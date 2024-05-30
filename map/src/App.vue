@@ -75,6 +75,7 @@ export default {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  margin-right: 2%; /* Aggiunto margine alla destra */
 }
 
 .calendar-button:hover {
@@ -123,10 +124,10 @@ export default {
 /* Map Styles */
 .map-wrap {
   position: absolute;
-  top: 60px; /* Height of the navbar */
+  top: 7%; /* Height of the navbar */
   left: 0;
   right: 0;
   bottom: 0;
-  margin-top: -60px; /* Negative margin to overlap with the navbar */
+  margin-top: 0; /* Negative margin to overlap with the navbar */
 }
 </style>
