@@ -2,7 +2,7 @@
   <div>
     <!-- Navbar -->
     <nav class="navbar">
-      <div class="navbar-brand"><center>Visualizza gli eventi</center></div>
+      <div class="navbar-brand">CONSULTA LA MAPPA DEGLI EVENTI</div>
       <button class="calendar-button" @click="openCalendarPopup">Apri Calendario</button>
     </nav>
 
@@ -52,7 +52,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #007bff;
+  background-color: #5d0460;
   padding: 10px 20px;
   color: white;
   position: fixed;
@@ -65,16 +65,19 @@ export default {
 .navbar-brand {
   font-size: 1.5em;
   font-weight: bold;
+  font-family: 'Century Gothic', serif; /* Cambia il tipo di font */
   flex-grow: 1; /* Per centrare il testo */
+  transform: translateX(+45%);
 }
 
 .calendar-button {
   padding: 10px 20px;
-  background-color: #0056b3;
-  color: white;
+  background-color: #480c57;
+  color: rgb(255, 255, 255);
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  font-family: 'Century Gothic', serif;
   margin-right: 2%; /* Aggiunto margine alla destra */
 }
 
@@ -124,7 +127,7 @@ export default {
 /* Map Styles */
 .map-wrap {
   position: absolute;
-  top: 7%; /* Height of the navbar */
+  top: 5.5%; /* Height of the navbar */
   left: 0;
   right: 0;
   bottom: 0;
