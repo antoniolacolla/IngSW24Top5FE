@@ -35,11 +35,16 @@ onMounted(async () => {
 
   // Aggiungi i marker con le coordinate ricevute
   coordinates.forEach(coord => {
-
+    const eventName = coord.nomevento.replace(/\s+/g, ''); // Rimuove gli spazi dal nome dell'evento
     const popupContent = `
       <div class="popup-content">
         <h3 class="popup-title">${coord.nomevento}</h3>
         <a class="popup-link" href="https://www.google.com/maps/dir/${coordinateutente.latitudine},${coordinateutente.longitudine}/${coord.latitudine},${coord.longitudine}" target="_blank">Come arrivarci</a>
+        <div class="social-links">
+          <a href="https://x.com/${coord.nomevento}" target="_blank"><img src="/x-icon.png" alt="X" class="social-icon" /></a>
+          <a href="https://instagram.com/${coord.nomevento}" target="_blank"><img src="/instagram-icon.png" alt="Instagram" class="social-icon" /></a>
+          <a href="https://facebook.com/${coord.nomevento}" target="_blank"><img src="/facebook-icon.png" alt="Facebook" class="social-icon" /></a>
+        </div>
       </div>`;
 
     const popup = new Popup({ className: 'custom-popup' }).setHTML(popupContent);
@@ -49,15 +54,15 @@ onMounted(async () => {
       .setPopup(popup) // Aggiungi il popup al marker
       .addTo(map.value);
     markers.value.push(marker);
-});
+  });
 
-// Marker e Popup utente
-const popupUtente = new Popup({ className: 'custom-popup' }).setHTML("<h3 class='popup-title'>Ti trovi qui!</h3>");
-const markerUtente = new Marker({ color: "#0000FF" }) // Colore diverso per il marker dell'utente
-  .setLngLat([coordinateutente.longitudine, coordinateutente.latitudine])
-  .setPopup(popupUtente)
-  .addTo(map.value);
-markers.value.push(markerUtente);
+  // Marker e Popup utente
+  const popupUtente = new Popup({ className: 'custom-popup' }).setHTML("<h3 class='popup-title'>Ti trovi qui!</h3>");
+  const markerUtente = new Marker({ color: "#0000FF" }) // Colore diverso per il marker dell'utente
+    .setLngLat([coordinateutente.longitudine, coordinateutente.latitudine])
+    .setPopup(popupUtente)
+    .addTo(map.value);
+  markers.value.push(markerUtente);
 });
 
 onUnmounted(() => {
@@ -67,17 +72,43 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.map-wrap 
-{
-  position: relative;
+.map-wrap {
+  position: absolute;
+  top: 60px; /* Height of the navbar */
   width: 100%;
-  height: 100vh;
+  bottom: 0; /* Ensure it stretches to the bottom */
 }
 
-.map 
-{
+.map {
   position: absolute;
   width: 100%;
   height: 100%;
 }
+
+.popup-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.popup-title {
+  margin-bottom: 10px;
+}
+
+.popup-link {
+  margin-bottom: 10px;
+  color: #007bff;
+  text-decoration: none;
+}
+
+.social-links {
+  display: flex;
+  gap: 1px;
+}
+
+.social-icon {
+  width: 1%;
+  height: 1%;
+}
 </style>
+
