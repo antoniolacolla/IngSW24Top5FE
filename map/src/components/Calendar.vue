@@ -13,32 +13,47 @@
       </thead>
       <tbody>
         <tr v-for="week in weeksInMonth" :key="week[0].fullDate">
-          <td v-for="day in week" :key="day.fullDate" @click="selectDay(day.date)">
+          <td v-for="day in week" :key="day.fullDate" @click="day.date && showPopup(day.fullDate)" :class="{ 'clickable': day.event }">
             <div :class="{ 'current-month': day.currentMonth, 'other-month': !day.currentMonth }">
               {{ day.date }}
-              <div v-if="events[day.fullDate]" class="event">
-                {{ events[day.fullDate].nomevento }}
-              </div>
             </div>
           </td>
         </tr>
       </tbody>
     </table>
+
+    <!-- Popup for displaying the event details -->
+    <div v-if="showEventPopup" class="popup-overlay" @click="hidePopup">
+      <div class="popup-content" @click.stop>
+        <h3>{{ selectedEvent.nomevento }}</h3>
+        <p>{{ selectedEvent.descrizionevento }}</p>
+        <p>{{ selectedEvent.dataevento }}</p>
+        <button @click="hidePopup" class="close-button">Close</button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+
+function normalizeDate(dateString) {
+  const [year, month, day] = dateString.split('-');
+  return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+}
+
 export default {
   data() {
     return {
       currentDate: new Date(),
       daysOfWeek: ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato', 'Domenica'],
-      events: {
-        '2024-6-5': { nomevento: 'Paparazzi' }
-      },
-      selectedDay: null,
-      eventText: '',
+      showEventPopup: false,
+      selectedEvent: null,
+      events: []
     };
+  },
+  async created() {
+    await this.fetchEvents();
   },
   computed: {
     currentYear() {
@@ -56,21 +71,28 @@ export default {
     },
     weeksInMonth() {
       const weeks = [];
-      const firstDay = new Date(this.currentYear, this.currentMonth, 1).getDay();
-      let day = 1 - (firstDay === 0 ? 6 : firstDay - 1);
-      while (day <= this.daysInMonth.length) {
-        weeks.push(Array.from({ length: 7 }, () => {
-          const currentDay = day > 0 && day <= this.daysInMonth.length ? day : null;
-          const date = new Date(this.currentYear, this.currentMonth, currentDay);
-          const fullDate = date.toISOString().split('T')[0];
-          day++;
-          return { date: currentDay, fullDate, currentMonth: currentDay !== null };
-        }));
+      const firstDayOfMonth = new Date(this.currentYear, this.currentMonth, 1).getDay();
+      const daysInMonth = this.daysInMonth.length;
+      let dayCounter = 1 - (firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1);
+
+      while (dayCounter <= daysInMonth) {
+        const week = Array.from({ length: 7 }, () => {
+          const currentDay = dayCounter > 0 && dayCounter <= daysInMonth ? dayCounter : null;
+          const date = new Date(this.currentYear, this.currentMonth, currentDay || 1);
+          const fullDate = currentDay ? date.toISOString().split('T')[0] : '';
+          dayCounter++;
+          return { date: currentDay, fullDate, currentMonth: currentDay !== null, event: this.events.find(event => event.dataevento.startsWith(fullDate)) };
+        });
+        weeks.push(week);
       }
       return weeks;
     },
   },
   methods: {
+    async fetchEvents() {
+      const response = await axios.get('/api/callRESTcalendario');
+      this.events = response.data;
+    },
     prevMonth() {
       this.currentDate.setMonth(this.currentMonth - 1);
       this.currentDate = new Date(this.currentDate);
@@ -79,24 +101,26 @@ export default {
       this.currentDate.setMonth(this.currentMonth + 1);
       this.currentDate = new Date(this.currentDate);
     },
-    selectDay(day) {
-      this.selectedDay = { date: day, month: this.currentMonth, year: this.currentYear };
-    },
-    clearSelection() {
-      this.selectedDay = null;
-      this.eventText = '';
-    },
-    addEvent() {
-      if (this.eventText.trim()) {
-        const fullDate = new Date(this.selectedDay.year, this.selectedDay.month, this.selectedDay.date).toISOString().split('T')[0];
-        this.$set(this.events, fullDate, { nomevento: this.eventText });
-        this.clearSelection();
+    showPopup(date) {
+      const normalizedDate = normalizeDate(date);
+      const event = this.events.find(event => {
+        const eventDate = normalizeDate(event.dataevento);
+        return eventDate === normalizedDate;
+      });
+      if (event) {
+        this.selectedEvent = event;
+        this.showEventPopup = true;
+      } else {
+        // Chiudi il popup se non ci sono eventi per la data cliccata
+        this.hidePopup();
       }
     },
+    hidePopup() {
+      this.showEventPopup = false;
+      this.selectedEvent = null;
+    }
   },
 };
- 
-  
 </script>
 
 <style scoped>
@@ -149,51 +173,35 @@ export default {
   background-color: #f9f9f9;
 }
 
-.event {
-  background-color: #007bff;
-  color: white;
-  padding: 2px 5px;
-  border-radius: 3px;
-  font-size: 0.9em;
-  text-align: center;
-  margin-top: 5px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.clickable {
+  cursor: pointer;
 }
 
-.event-input {
+.popup-overlay {
   position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 90%;
-  max-width: 400px;
-  padding: 20px;
-  background-color: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.event-input input {
-  width: calc(100% - 20px);
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
+.popup-content {
+  background-color: white;
+  padding: 20px;
   border-radius: 5px;
 }
 
-.event-input button {
+.close-button {
+  margin-top: 10px;
   background-color: #007bff;
   color: white;
   border: none;
-  padding: 10px;
   border-radius: 5px;
+  padding: 8px 16px;
   cursor: pointer;
-  margin-right: 5px;
-}
-
-.event-input button:hover {
-  background-color: #0056b3;
 }
 </style>
