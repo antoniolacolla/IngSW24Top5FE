@@ -2,7 +2,7 @@
   <div class="calendar">
     <div class="calendar-header">
       <button @click="prevMonth" class="prev-next-button">Prev</button>
-      <div class="header-title">{{ currentMonthName }} {{ currentYear }}</div>
+      <div class="header-title month-name">{{ capitalizeFirstLetter(currentMonthName) }} {{ currentYear }}</div>
       <button @click="nextMonth" class="prev-next-button">Next</button>
     </div>
     <table class="calendar-table">
@@ -13,7 +13,7 @@
       </thead>
       <tbody>
         <tr v-for="week in weeksInMonth" :key="week[0].fullDate">
-          <td v-for="day in week" :key="day.fullDate" @click="day.date && showPopup(day.fullDate)" :class="{ 'clickable': day.event }">
+          <td v-for="day in week" :key="day.fullDate" @click="day.date && showPopup(day.fullDate)" :class="['day-cell', { 'clickable': day.date && day.event }]">
             <div :class="{ 'current-month': day.currentMonth, 'other-month': !day.currentMonth }">
               {{ day.date }}
             </div>
@@ -34,6 +34,7 @@
   </div>
 </template>
 
+
 <script>
 import axios from 'axios';
 
@@ -49,7 +50,8 @@ export default {
       daysOfWeek: ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato', 'Domenica'],
       showEventPopup: false,
       selectedEvent: null,
-      events: []
+      events: [],
+      noEventMessage: false
     };
   },
   async created() {
@@ -110,18 +112,25 @@ export default {
       if (event) {
         this.selectedEvent = event;
         this.showEventPopup = true;
+        this.noEventMessage = false;
       } else {
-        // Chiudi il popup se non ci sono eventi per la data cliccata
-        this.hidePopup();
+        this.selectedEvent = { nomevento: "Nessun evento", descrizionevento: "Nessun evento presente in questo giorno!", dataevento: date };
+        this.showEventPopup = true;
+        this.noEventMessage = true;
       }
     },
     hidePopup() {
       this.showEventPopup = false;
       this.selectedEvent = null;
+      this.noEventMessage = false;
+    },
+    capitalizeFirstLetter(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
     }
   },
 };
 </script>
+
 
 <style scoped>
 .calendar {
@@ -141,7 +150,7 @@ export default {
 }
 
 .prev-next-button {
-  background-color: #007bff;
+  background-color: #300570;
   color: white;
   border: none;
   border-radius: 5px;
@@ -173,8 +182,12 @@ export default {
   background-color: #f9f9f9;
 }
 
-.clickable {
+.day-cell {
   cursor: pointer;
+}
+
+.clickable {
+  background-color: #300570; /* Colore di sfondo per i giorni con eventi */
 }
 
 .popup-overlay {
@@ -197,13 +210,16 @@ export default {
 
 .close-button {
   margin-top: 10px;
-  background-color: #007bff;
+  background-color: #300570;
   color: white;
   border: none;
   border-radius: 5px;
   padding: 8px 16px;
   cursor: pointer;
 }
-</style>
 
-//antonino
+.month-name {
+  font-weight: bold;
+}
+
+</style>
