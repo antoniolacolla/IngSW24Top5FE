@@ -5,26 +5,27 @@
 </template>
 
 <script setup>
-import { Map, MapStyle, Marker, Popup, config } from '@maptiler/sdk';
-import { shallowRef, onMounted, onUnmounted, markRaw } from 'vue';
-import axios from 'axios';
-import '@maptiler/sdk/dist/maptiler-sdk.css';
+import { Map, MapStyle, Marker, Popup, config } from '@maptiler/sdk'; // Importa le componenti di MapTiler SDK
+import { shallowRef, onMounted, onUnmounted, markRaw } from 'vue'; // Importa le funzioni di Vue.js
+import axios from 'axios'; // Importa axios per le chiamate API
+import '@maptiler/sdk/dist/maptiler-sdk.css'; // Importa gli stili di MapTiler SDK
 
-const mapContainer = shallowRef(null);
-const map = shallowRef(null);
-const markers = shallowRef([]);
+const mapContainer = shallowRef(null); // Riferimento al contenitore della mappa
+const map = shallowRef(null); // Riferimento alla mappa
+const markers = shallowRef([]); // Riferimento agli array dei marker
 
 onMounted(async () => {
-  config.apiKey = 'I4M3OisYlYJWkLCFDwoa';
+  config.apiKey = 'I4M3OisYlYJWkLCFDwoa'; // Imposta la chiave API di MapTiler
 
-  // Effettua la chiamata API per ottenere le coordinate
+  // Effettua la chiamata API per ottenere le coordinate degli eventi
   const response = await axios.get("/api/callRESTevento");
   const coordinates = response.data;
 
+  // Effettua la chiamata API per ottenere le coordinate dell'utente
   const responseUtente = await axios.get("/api/callRESTutente");
   const coordinateUtente = responseUtente.data;
 
-  const initialState = { lng: 11.2892, lat: 44.7269, zoom: 4 };
+  const initialState = { lng: 11.2892, lat: 44.7269, zoom: 4 }; // Stato iniziale della mappa
 
   map.value = markRaw(new Map({
     container: mapContainer.value,
@@ -37,6 +38,8 @@ onMounted(async () => {
   // Aggiungi i marker con le coordinate ricevute
   coordinates.forEach(coord => {
     const eventName = coord.nomevento.replace(/\s+/g, ''); // Rimuove gli spazi dal nome dell'evento
+
+    //Creazione del contenuto del popup, con link per i trasporti e icone che riportano ai vari social
     const popupContent = `
       <div class="popup-content">
         <h3 class="popup-title">${coord.nomevento}</h3>
@@ -48,7 +51,7 @@ onMounted(async () => {
         </div>
       </div>`;
 
-    const popup = new Popup({ className: 'custom-popup' }).setHTML(popupContent);
+    const popup = new Popup({ className: 'custom-popup' }).setHTML(popupContent); // Crea un popup per ogni evento
     
     // Imposta il colore del marker in base all'accessibilità dell'evento
     const markerColor = coord.accessibilità === "privato" ? "#e6e6fa" : "#ff0000";
@@ -56,8 +59,8 @@ onMounted(async () => {
     const marker = new Marker({ color: markerColor })
       .setLngLat([coord.longitudine, coord.latitudine])
       .setPopup(popup) // Aggiungi il popup al marker
-      .addTo(map.value);
-    markers.value.push(marker);
+      .addTo(map.value); // Aggiungi il marker alla mappa
+    markers.value.push(marker); // Aggiungi il marker all'array dei marker
   });
 
   // Marker e Popup utente
@@ -65,22 +68,22 @@ onMounted(async () => {
   const markerUtente = new Marker({ color: "#4169e1" }) // Colore diverso per il marker dell'utente
     .setLngLat([coordinateUtente.longitudine, coordinateUtente.latitudine])
     .setPopup(popupUtente)
-    .addTo(map.value);
-  markers.value.push(markerUtente);
+    .addTo(map.value); // Aggiungi il marker dell'utente alla mappa
+  markers.value.push(markerUtente); // Aggiungi il marker dell'utente all'array dei marker
 });
 
 onUnmounted(() => {
-  map.value?.remove();
-  markers.value.forEach(marker => marker.remove());
+  map.value?.remove(); // Rimuovi la mappa al momento dello smontaggio del componente
+  markers.value.forEach(marker => marker.remove()); // Rimuovi tutti i marker
 });
 </script>
 
 <style scoped>
 .map-wrap {
   position: absolute;
-  top: 60px; /* Height of the navbar */
+  top: 60px; /* Altezza della navbar */
   width: 100%;
-  bottom: 0; /* Ensure it stretches to the bottom */
+  bottom: 0; /* Assicura che si estenda fino al fondo */
 }
 
 .map {

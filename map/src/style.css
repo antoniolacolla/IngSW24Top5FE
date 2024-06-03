@@ -13,43 +13,40 @@ code {
   monospace;
 }
 
-
 /* Stile dei popup */
 .popup-content {
   padding: 10px;
-  background-color: #ffffff;
+  background-color: #ffffff; /* Colore di sfondo bianco */
   border: 2px solid #000000; /* Bordo nero */
   border-radius: 10px; /* Arrotondamento dei bordi */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  font-family: 'Arial', sans-serif;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ombra leggera per il popup */
+  font-family: 'Arial', sans-serif; /* Font del popup */
   margin: 2px; /* Margine quasi nullo */
 }
 
 .popup-title {
   margin: 0;
-  font-size: 16px;
-  color: #333333;
+  font-size: 16px; /* Dimensione del testo del titolo */
+  color: #333333; /* Colore del testo del titolo */
 }
 
 .popup-link {
   display: block;
-  margin-top: 5px;
+  margin-top: 5px; /* Margine superiore per il link */
   color: #007bff; /* Colore del link blu */
-  text-decoration: none;
+  text-decoration: none; /* Nessuna sottolineatura per il link */
 }
 
 .popup-link:hover {
-  text-decoration: underline;
+  text-decoration: underline; /* Sottolineatura del link al passaggio del mouse */
 }
 
 /* Stile del marker utente */
 .marker-user {
-  color: #0000ff;
+  color: #0000ff; /* Colore del marker utente: blu */
 }
 
 /* Stile del marker evento */
 .marker-event {
-  color: #ff0000;
+  color: #ff0000; /* Colore del marker evento: rosso */
 }
-
-
