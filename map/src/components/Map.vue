@@ -21,8 +21,8 @@ onMounted(async () => {
   const response = await axios.get("/api/callRESTevento");
   const coordinates = response.data;
 
-  const responseutente = await axios.get("/api/callRESTutente");
-  const coordinateutente = responseutente.data;
+  const responseUtente = await axios.get("/api/callRESTutente");
+  const coordinateUtente = responseUtente.data;
 
   const initialState = { lng: 11.2892, lat: 44.7269, zoom: 4 };
 
@@ -32,6 +32,7 @@ onMounted(async () => {
     center: [initialState.lng, initialState.lat],
     zoom: initialState.zoom
   }));
+  
 
   // Aggiungi i marker con le coordinate ricevute
   coordinates.forEach(coord => {
@@ -39,7 +40,7 @@ onMounted(async () => {
     const popupContent = `
       <div class="popup-content">
         <h3 class="popup-title">${coord.nomevento}</h3>
-        <a class="popup-link" href="https://www.google.com/maps/dir/${coordinateutente.latitudine},${coordinateutente.longitudine}/${coord.latitudine},${coord.longitudine}" target="_blank">Come arrivarci</a>
+        <a class="popup-link" href="https://www.google.com/maps/dir/${coordinateUtente.latitudine},${coordinateUtente.longitudine}/${coord.latitudine},${coord.longitudine}" target="_blank">Come arrivarci</a>
         <div class="social-links">
           <a href="https://x.com/${coord.nomevento}" target="_blank"><img src="/x-icon.png" alt="X" class="social-icon" /></a>
           <a href="https://instagram.com/${coord.nomevento}" target="_blank"><img src="/instagram-icon.png" alt="Instagram" class="social-icon" /></a>
@@ -49,7 +50,10 @@ onMounted(async () => {
 
     const popup = new Popup({ className: 'custom-popup' }).setHTML(popupContent);
     
-    const marker = new Marker({ color: "#FF0000" })
+    // Imposta il colore del marker in base all'accessibilità dell'evento
+    const markerColor = coord.accessibilità === "privato" ? "#e6e6fa" : "#ff0000";
+
+    const marker = new Marker({ color: markerColor })
       .setLngLat([coord.longitudine, coord.latitudine])
       .setPopup(popup) // Aggiungi il popup al marker
       .addTo(map.value);
@@ -58,8 +62,8 @@ onMounted(async () => {
 
   // Marker e Popup utente
   const popupUtente = new Popup({ className: 'custom-popup' }).setHTML("<h3 class='popup-title'>Ti trovi qui!</h3>");
-  const markerUtente = new Marker({ color: "#0000FF" }) // Colore diverso per il marker dell'utente
-    .setLngLat([coordinateutente.longitudine, coordinateutente.latitudine])
+  const markerUtente = new Marker({ color: "#4169e1" }) // Colore diverso per il marker dell'utente
+    .setLngLat([coordinateUtente.longitudine, coordinateUtente.latitudine])
     .setPopup(popupUtente)
     .addTo(map.value);
   markers.value.push(markerUtente);
@@ -111,4 +115,3 @@ onUnmounted(() => {
   height: 1%;
 }
 </style>
-

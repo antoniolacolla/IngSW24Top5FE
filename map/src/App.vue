@@ -53,7 +53,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #490696;
+  background-color: #035d14;
   padding: 10px 20px;
   color: white;
   position: fixed;
@@ -73,7 +73,7 @@ export default {
 
 .calendar-button {
   padding: 10px 20px;
-  background-color: #300570;
+  background-color: #013b0d;
   color: white;
   border: none;
   border-radius: 5px;
