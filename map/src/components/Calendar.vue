@@ -28,12 +28,25 @@ export default {
   computed: {
     calendarEvents() {
       // Mappa gli eventi mock nel formato richiesto da vue-cal
-      return this.events.map(event => ({
-        start: event.dataevento,
-        end: event.dataevento,
-        title: event.nomevento,
-        content: event.descrizionevento,
-      }));
+      return this.events.map(event => {
+        const [startHour, startMinute] = event.orarioevento.split(' - ')[0].split(':');
+        const [endHour, endMinute] = event.orarioevento.split(' - ')[1].split(':');
+
+        const startDateTime = new Date(event.dataevento);
+        startDateTime.setHours(startHour);
+        startDateTime.setMinutes(startMinute);
+
+        const endDateTime = new Date(event.dataevento);
+        endDateTime.setHours(endHour);
+        endDateTime.setMinutes(endMinute);
+
+        return {
+          start: startDateTime,
+          end: endDateTime,
+          title: event.nomevento,
+          content: event.descrizionevento,
+        };
+      });
     },
   },
   mounted() {
